@@ -40,5 +40,4 @@ app.get('*', (req, res) => {
 
 app.listen(() => {
     console.log(`Listening on port ` + port);
-    console.log(`Dirname: ${path.basename}`);
 })

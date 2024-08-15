@@ -1,4 +1,4 @@
-export default function IncomeAdder() {
+export default function InvestmentAdder() {
     return (
         <div>
             

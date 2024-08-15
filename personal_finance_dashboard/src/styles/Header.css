@@ -1,0 +1,20 @@
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3.6rem;
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid rgba(129, 133, 137, 0.6);
+}
+
+.nav-bound {
+    margin: 0 4.5rem;
+}
+
+.nav-center button {
+    margin: 0 2.5rem;
+}

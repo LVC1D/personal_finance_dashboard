@@ -2,7 +2,7 @@ const ROUTES = {
     HOME: '/',
     REGISTER: '/register',
     LOGIN: '/login',
-    USER: (userId) = `/${userId}`,
+    USER: (userId) =>  `/${userId}`,
     EXPENSES: '/expenses',
     EXPENSE: (expenseId) => `/expenses/${expenseId}`,
     INCOMES: '/income',
