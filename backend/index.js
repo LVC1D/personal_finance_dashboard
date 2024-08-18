@@ -10,9 +10,16 @@ const cors = require('cors');
 const partials = require('express-partials');
 const flash = require('connect-flash');
 require('dotenv').config();
-const {ensureAuthenticated, calculateSubtotal} = require('./helpers');
+const {
+    ensureAuthenticated,
+    totalIncome,
+    totalExpenses,
+    totalInvestments
+} = require('./helpers');
 const {authRouter, initAuth} = require('./apiRoutes/authApi');
-const userRouter = require('./apiRoutes/userApi')(pool, ensureAuthenticated)
+const userRouter = require('./apiRoutes/userApi')(pool, ensureAuthenticated);
+const incomeRouter = require('./apiRoutes/incomeApi')(pool, ensureAuthenticated, totalIncome);
+const expenseRouter = require('./apiRoutes/expenseApi')(pool, ensureAuthenticated, totalExpenses);
 
 // set up and initialzie the server
 
@@ -38,6 +45,8 @@ initAuth(app);
 // apply the API routes
 app.use('/api/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/income', incomeRouter);
+app.use('/expenses', expenseRouter);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'personal_finance_dasboard', 'dist', 'index.html'));
