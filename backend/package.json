@@ -1,10 +1,11 @@
 {
-  "name": "hectorcryo",
+  "name": "personal-finance_dashboard",
   "version": "1.0.0",
-  "description": "",
-  "main": "newJSExercise.js",
+  "description": "a final PERN app",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "express": "^4.19.2",
     "express-partials": "^0.3.0",
     "express-session": "^1.18.0",
+    "express-validator": "^7.2.0",
     "flash": "^1.1.0",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
