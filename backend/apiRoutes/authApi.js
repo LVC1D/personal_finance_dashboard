@@ -100,9 +100,9 @@ authRouter.post('/login', (req, res, next) => {
 
 authRouter.get('/is_logged_in', (req, res) => {
     if (req.isAuthenticated()) {
-        return res.json({ user: req.user });
+        return res.json({ user: req.user, isAuth: true });
     } else {
-        return res.status(401).json({ error: 'Not authenticated' });
+        return res.status(401).json({ error: 'Not authenticated', isAuth: false });
     }
 });
 
@@ -113,8 +113,8 @@ const initAuth = (app) => {
         resave: false,
         saveUninitialized: false,
         cookie: { 
-            secure: false, //true
-            httpOnly: false, 
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true, 
             maxAge: 8640000000,
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' //none
         },

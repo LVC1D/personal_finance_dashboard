@@ -7,10 +7,11 @@
 .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
     justify-content: stretch;
+    align-content: stretch;
     gap: 25px;
-    height: 1750px;
+    height: 900px;
     margin: 3% 2%;
 }
 

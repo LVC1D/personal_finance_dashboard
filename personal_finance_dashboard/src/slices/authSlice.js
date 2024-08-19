@@ -33,7 +33,7 @@ export const loginUser = createAsyncThunk(
                 email,
                 password
             });
-            console.log(`User logged in: ${response.data}`)
+            console.log('Login response data: ', response.data);
             return response.data;
         } catch(err) {
             throw err.response.data
@@ -111,11 +111,12 @@ const authSlice = createSlice({
             })
             .addCase(checkLoginStatus.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.isAuth = state.isAuth === true || state.isAuth === false;
                 state.user = action.payload.user;
-                state.isAuth = action.payload.isAuth;
+                console.log('Current isAuth payload: ', state.isAuth)
             })
             .addCase(checkLoginStatus.rejected, (state, action) => {
-                state.isLoading = true;
+                state.isLoading = false;
                 state.hasError = true;
                 state.error = action.error.message;
                 state.isAuth = false;

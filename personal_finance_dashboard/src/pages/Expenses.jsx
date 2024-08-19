@@ -1,5 +1,6 @@
 import ExpenseStat from '../components/ExpenseStat';
 import ExpenseAdder from '../components/ExpenseAdder';
+import '../styles/Dashboard.css';
 
 export default function Expenses() {
     return (

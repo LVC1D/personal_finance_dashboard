@@ -2,7 +2,6 @@ import InvestmentStat from '../components/InvestmentStat';
 import InvestmentAdder from '../components/InvestmentAdder';
 import LiveStockFeed from '../components/LiveStockFeed';
 
-
 export default function Investments() {
     return (
         <div className='grid-container'>

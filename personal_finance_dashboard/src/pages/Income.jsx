@@ -1,5 +1,6 @@
 import IncomeStat from '../components/IncomeStat';
 import IncomeAdder from '../components/IncomeAdder';
+import '../styles/Dashboard.css'
 
 export default function Income() {
     return (

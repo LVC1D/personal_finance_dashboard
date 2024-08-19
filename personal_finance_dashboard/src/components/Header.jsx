@@ -1,14 +1,20 @@
 import ROUTES from "../routes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import '../styles/Header.css';
 import { logoutUser } from "../slices/authSlice";
+import { loadIncomes } from "../slices/incomeSlice";
 
 export default function Header () {
     const dispatch = useDispatch();
-    const handleLogout = () => dispatch(logoutUser());
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        dispatch(logoutUser());
+        navigate(ROUTES.HOME);
+    };
     
-    const {isAuth} = useSelector(state => state.auth);
+    const {isAuth, user} = useSelector(state => state.auth);
 
     return (
         <header>
@@ -38,7 +44,7 @@ export default function Header () {
                 <Link to={ROUTES.USER}>
                     <p hidden={!isAuth}>My profile</p>
                 </Link>
-                <button onClick={handleLogout}>
+                <button onClick={handleLogout} hidden={!isAuth}>
                     Log out
                 </button>
             </div>

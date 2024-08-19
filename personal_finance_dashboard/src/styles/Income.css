@@ -1,0 +1,12 @@
+.pie-chart {
+    margin-top: 50px;
+}    
+
+.income-list {
+    overflow: scroll;
+    max-height: 270px;
+}
+
+.income-item {
+    list-style: none;
+}

@@ -3,7 +3,7 @@ const ROUTES = {
     REGISTER: '/register',
     LOGIN: '/login',
     USER: (userId) =>  `/${userId}`,
-    EXPENSES: '/expenses',
+    EXPENSES:  '/expenses',
     EXPENSE: (expenseId) => `/expenses/${expenseId}`,
     INCOMES: '/income',
     INCOME: (incomeId) => `/income/${incomeId}`,
