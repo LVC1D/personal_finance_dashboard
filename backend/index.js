@@ -45,7 +45,7 @@ initAuth(app);
 // apply the API routes
 app.use('/api/auth', authRouter);
 app.use('/users', userRouter);
-app.use('/income', incomeRouter);
+app.use('/incomes', incomeRouter);
 app.use('/expenses', expenseRouter);
 
 app.get('*', (req, res) => {

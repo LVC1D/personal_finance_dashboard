@@ -63,7 +63,8 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setUser: (state) => {
+        setUser: (state, action) => {
+            state.user = action.payload;
             state.isAuth = true;
         },
         logoutUser: (state) => {
@@ -111,9 +112,13 @@ const authSlice = createSlice({
             })
             .addCase(checkLoginStatus.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isAuth = state.isAuth === true || state.isAuth === false;
-                state.user = action.payload.user;
-                console.log('Current isAuth payload: ', state.isAuth)
+                if (action.payload && action.payload.user) {
+                    state.user = action.payload.user;
+                    state.isAuth = true;
+                } else {
+                    state.isAuth = false;
+                    state.user = null;
+                }
             })
             .addCase(checkLoginStatus.rejected, (state, action) => {
                 state.isLoading = false;

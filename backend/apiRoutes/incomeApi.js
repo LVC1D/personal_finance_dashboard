@@ -3,20 +3,29 @@ const {body, validationResult} = require('express-validator')
 
 module.exports = (pool, ensureAuthenticated, totalIncome) => {
     incomeRouter.get('/', ensureAuthenticated, async (req, res, next) => {
-        const userId = parseInt(req.query.userId);
-        if (isNaN(userId)) {
-            res.status(400).json({ message: "Invalid user ID" });
-            return;
+        let userId = parseInt(req.query.userId);
+
+        // Validate the userId
+        if (!userId || isNaN(userId) || userId !== req.user?.id) {
+            return res.status(400).json({ message: "Invalid or missing user ID" });
         }
 
         await pool.query('SELECT * FROM income WHERE user_id = $1', [userId], (err, result) => {
             if (err) {
-                console.error("Error fetching income:", err);
+                console.error("Error fetching expense:", err);
                 res.status(500).json({ message: err.message });
             } else {
                 res.status(200).json(result.rows);
             }
         });
+
+        // try {
+        //     const result = await pool.query('SELECT * FROM income WHERE user_id = $1', [userId]);
+        //     res.status(200).json(result.rows);
+        // } catch (err) {
+        //     console.error("Error fetching income:", err);
+        //     res.status(500).json({ message: "Server error, please try again later." });
+        // }
     });
 
     incomeRouter.get('/:id', ensureAuthenticated, async (req, res, next) => {

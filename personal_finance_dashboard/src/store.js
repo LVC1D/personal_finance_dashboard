@@ -6,7 +6,7 @@ import expenseSlice from './slices/expenseSlice';
 export const store = configureStore({
     reducer: {
         auth: authSlice,
-        income: incomeSlice,
+        incomes: incomeSlice,
         expenses: expenseSlice,
     }
 })

@@ -6,18 +6,18 @@ import '../styles/Income.css';
 
 export default function IncomeStat() {
     const dispatch = useDispatch();
-    const {income, isLoading, hasError} = useSelector((state) => state.income);
-    const {user} = useSelector((state) => state.auth);
-
+    const {incomes, isLoading, hasError} = useSelector((state) => state.incomes);
+    const {user, isAuth} = useSelector((state) => state.auth);
+    
     return (
         <div>
             <div className="pie-chart">
-                <PieChart data={income} />
+                <PieChart data={incomes} />
             </div>
             <h2>Your total income: ${user?.total_income}</h2>
             <div className="income-list">
                 {isLoading && <p>Loading data...</p>}
-                {income.map(item => (
+                {incomes.map(item => (
                     <li key = {item.id} className='income-item'>
                         <p>{item.category}</p>
                         <p>{item.amount}</p>

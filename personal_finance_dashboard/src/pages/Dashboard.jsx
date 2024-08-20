@@ -14,10 +14,9 @@ export default function Dashboard() {
 
     console.log(`User ID is ${user?.id}`);
 
-    useEffect(() => {
-        dispatch(checkLoginStatus());
-        
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(checkLoginStatus()); 
+    // }, [dispatch]);
 
     return (
         <>

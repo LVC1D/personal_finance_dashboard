@@ -4,10 +4,11 @@ const { totalIncome } = require('../helpers');
 
 module.exports = (pool, ensureAuthenticated, totalExpenses) => {
     expenseRouter.get('/', ensureAuthenticated, async (req, res, next) => {
-        const userId = parseInt(req.query.userId);
-        if (isNaN(userId)) {
-            res.status(400).json({ message: "Invalid user ID" });
-            return;
+        let userId = parseInt(req.query.userId);
+
+        // Validate the userId
+        if (!userId || isNaN(userId) || userId !== req.user?.id) {
+            return res.status(400).json({ message: "Invalid or missing user ID" });
         }
 
         await pool.query('SELECT * FROM expenses WHERE user_id = $1', [userId], (err, result) => {

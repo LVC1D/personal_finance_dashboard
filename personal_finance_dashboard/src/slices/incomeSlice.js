@@ -2,17 +2,19 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../axios";
 
 const initialState = {
-    income: [],
+    incomes: [],
     isLoading: false,
     hasError: false
 }
 
 export const loadIncomes = createAsyncThunk(
-    'income/loadIncomes',
+    'incomes/loadIncomes',
     async ({userId}) => {
+        console.log('In loadIncomes thunk, received userId:', userId);
         try {
-            const response = await api.get(`/income?userId=${userId}`, {
-                withCredentials: true
+            const url = `/incomes?userId=${userId}`;
+            const response = await api.get(url, {
+                withCredentials: true,
             });
             console.log('Incomes data: ', response.data)
             return response.data;
@@ -23,11 +25,11 @@ export const loadIncomes = createAsyncThunk(
 );
 
 export const loadIncome = createAsyncThunk(
-    'income/loadIncome',
+    'incomes/loadIncome',
     async ({incomeId, userId}) => {
         try {
-            const response = await api.get('/income/' + incomeId + '?userId=' + userId, {
-                withCredentials: true
+            const response = await api.get('/incomes/' + incomeId + '?userId=' + userId, {
+                withCredentials: true,
             });
             return response.data;
         } catch(err) {
@@ -37,10 +39,10 @@ export const loadIncome = createAsyncThunk(
 );
 
 export const addIncome = createAsyncThunk(
-    'income/addIncome',
+    'incomes/addIncome',
     async ({userId, description, amount, category}) => {
         try {
-            const response = await api.post('/income/?userId=' + userId, {
+            const response = await api.post('/incomes/?userId=' + userId, {
                 category,
                 amount,
                 description
@@ -53,10 +55,10 @@ export const addIncome = createAsyncThunk(
 );
 
 export const updateIncome = createAsyncThunk(
-    'income/updateIncome',
+    'incomes/updateIncome',
     async ({incomeId, description, amount, category}) => {
         try {
-            const response = await api.put('/income/' + incomeId, {
+            const response = await api.put('/incomes/' + incomeId, {
                 category,
                 amount,
                 description
@@ -69,11 +71,11 @@ export const updateIncome = createAsyncThunk(
 );
 
 export const deleteIncome = createAsyncThunk(
-    'income/deleteIncome',
+    'incomes/deleteIncome',
     async (incomeId) => {
         try {
-            const response = await api.delete('/income/' + incomeId, {
-                withCredentials: true
+            const response = await api.delete('/incomes/' + incomeId, {
+                withCredentials: true,
             });
             return response.data;
         } catch(err) {
@@ -83,7 +85,7 @@ export const deleteIncome = createAsyncThunk(
 );
 
 const incomeSlice = createSlice({
-    name: 'income',
+    name: 'incomes',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -100,7 +102,7 @@ const incomeSlice = createSlice({
                 state.isLoading = false;
                 state.hasError = false;
                 console.log('Current state income is ', state.income)
-                state.income = action.payload;
+                state.incomes = action.payload;
             })
             .addCase(loadIncome.pending, state => {
                 state.isLoading = true;
@@ -113,7 +115,7 @@ const incomeSlice = createSlice({
             .addCase(loadIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.income = action.payload;
+                state.incomes = action.payload;
             })
             .addCase(addIncome.pending, state => {
                 state.isLoading = true;
@@ -126,7 +128,7 @@ const incomeSlice = createSlice({
             .addCase(addIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.income = action.payload;
+                state.incomes = action.payload;
             })
             .addCase(updateIncome.pending, state => {
                 state.isLoading = true;
@@ -139,7 +141,7 @@ const incomeSlice = createSlice({
             .addCase(updateIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.income = action.payload;
+                state.incomes = action.payload;
             })
             .addCase(deleteIncome.pending, state => {
                 state.isLoading = true;
@@ -152,7 +154,7 @@ const incomeSlice = createSlice({
             .addCase(deleteIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.income = state.income.filter(item => item.id !== action.payload.incomeId);
+                state.incomes = state.incomes.filter(item => item.id !== action.payload.incomeId);
             })
     }
 });
