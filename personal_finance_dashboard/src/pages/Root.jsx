@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {loadIncomes} from '../slices/incomeSlice';
 import {loadExpenses} from '../slices/expenseSlice';
-import { logoutUser } from "../slices/authSlice";
 import { checkLoginStatus } from "../slices/authSlice";
+import {loadBalances} from '../slices/userSlice'
 
 export default function Root() {
     const {user, isAuth, isLoading} = useSelector((state) => state.auth);
@@ -19,11 +19,16 @@ export default function Root() {
 
     useEffect(() => {
         if (isAuth && user) {
-            console.log('Dispatching loadIncomes with userId:', user.id);
-            dispatch(loadIncomes({userId: user.id}));
-            dispatch(loadExpenses({userId: user.id}));
-        } else {
-            dispatch(logoutUser());
+            // console.log('Dispatching loadIncomes with userId:', user.id);
+            dispatch(loadIncomes({userId: user.id}))
+            .then(() => {
+                dispatch(loadExpenses({userId: user.id}));
+            })
+            .then(() => {
+                dispatch(loadBalances({
+                    userId: user.id
+                }));
+            })
         }
     }, [dispatch, isAuth, user]);   
 

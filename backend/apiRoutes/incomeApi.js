@@ -73,7 +73,7 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
             );
     
             if (result.rows.length === 0) {
-                res.status(404).json({ message: "Expense not found." });
+                res.status(404).json({ message: "Income not found." });
                 return;
             }
     
@@ -126,6 +126,7 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
     });
 
     incomeRouter.delete('/:id', ensureAuthenticated, async (req, res, next) => {
+        const userId = parseInt(req.user.id);
         const incomeId = parseInt(req.params.id);
         if (!incomeId) {
             res.status(400).json({ message: "Ther desired income is not found." });
@@ -133,12 +134,15 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
         }  
 
         await pool.query('DELETE FROM income WHERE id = $1', [incomeId], 
-            (err) => {
+            async (err, result) => {
                 if (err) {
                     res.status(500).json("Couldn't delete the entry because of: ", err.message);
                     return; 
                 }
-                res.status(204).json({message: "Successfully deleted the entry."})
+                let incomeTotal = await totalIncome(userId, pool);
+                await pool.query('UPDATE users SET total_income = $1 WHERE id = $2', [incomeTotal, userId]);
+                const newIncomes = await pool.query('SELECT * FROM income WHERE user_id = $1', [userId]); 
+                res.status(200).json({message: "Successfully deleted the entry.", incomes: newIncomes.rows})
             }
         )
     })

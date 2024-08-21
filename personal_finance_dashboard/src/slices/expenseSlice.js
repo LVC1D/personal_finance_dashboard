@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../axios";
+import { checkLoginStatus } from "./authSlice";
 
 const initialState = {
     expenses: [],
@@ -14,7 +15,7 @@ export const loadExpenses = createAsyncThunk(
             const response = await api.get(`/expenses?userId=${userId}`, {
                 withCredentials: true
             });
-            console.log('Expenses data: ', response.data)
+            // console.log('Expenses data: ', response.data)
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -38,13 +39,14 @@ export const loadExpense = createAsyncThunk(
 
 export const addExpense = createAsyncThunk(
     'expenses/addExpense',
-    async ({userId, description, amount, category}) => {
+    async ({userId, description, amount, category}, {dispatch}) => {
         try {
             const response = await api.post('/expenses/?userId=' + userId, {
                 category,
                 amount,
                 description
             });
+            await dispatch(checkLoginStatus());
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -54,13 +56,14 @@ export const addExpense = createAsyncThunk(
 
 export const updateExpense = createAsyncThunk(
     'expenses/updateExpense',
-    async ({expenseId, description, amount, category}) => {
+    async ({expenseId, description, amount, category}, {dispatch}) => {
         try {
             const response = await api.put('/expenses/' + expenseId, {
                 category,
                 amount,
                 description
             });
+            await dispatch(checkLoginStatus());
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -70,11 +73,12 @@ export const updateExpense = createAsyncThunk(
 
 export const deleteExpense = createAsyncThunk(
     'expenses/deleteExpense',
-    async (expenseId) => {
+    async ({expenseId}, {dispatch}) => {
         try {
             const response = await api.delete('/expenses/' + expenseId, {
                 withCredentials: true
             });
+            await dispatch(checkLoginStatus());
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -99,7 +103,7 @@ const expenseSlice = createSlice({
             .addCase(loadExpenses.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                console.log('Current expenses are ', state.expenses)
+                // console.log('Current expenses are ', state.expenses)
                 state.expenses = action.payload;
             })
             .addCase(loadExpense.pending, state => {
@@ -113,7 +117,7 @@ const expenseSlice = createSlice({
             .addCase(loadExpense.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.expenses = action.payload;
+                state.expenses = state.expenses.find(item => item.id === action.payload.expenseId);
             })
             .addCase(addExpense.pending, state => {
                 state.isLoading = true;
@@ -126,7 +130,7 @@ const expenseSlice = createSlice({
             .addCase(addExpense.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.expenses = action.payload;
+                state.expenses.push(action.payload);
             })
             .addCase(updateExpense.pending, state => {
                 state.isLoading = true;

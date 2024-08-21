@@ -27,7 +27,12 @@ export default defineConfig({
         changeOrigin: true,
         ws: true,
         secure: false
-      }
+      },
+      '/users': {
+        target: 'http://localhost:7935',
+        changeOrigin: true,
+        secure: false
+      },
     }
   },
   build: {

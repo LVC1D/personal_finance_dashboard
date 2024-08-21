@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../axios";
+import { checkLoginStatus } from "./authSlice";
 
 const initialState = {
     incomes: [],
@@ -10,13 +11,13 @@ const initialState = {
 export const loadIncomes = createAsyncThunk(
     'incomes/loadIncomes',
     async ({userId}) => {
-        console.log('In loadIncomes thunk, received userId:', userId);
+        // console.log('In loadIncomes thunk, received userId:', userId);
         try {
             const url = `/incomes?userId=${userId}`;
             const response = await api.get(url, {
                 withCredentials: true,
             });
-            console.log('Incomes data: ', response.data)
+            // console.log('Incomes data: ', response.data)
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -40,13 +41,14 @@ export const loadIncome = createAsyncThunk(
 
 export const addIncome = createAsyncThunk(
     'incomes/addIncome',
-    async ({userId, description, amount, category}) => {
+    async ({userId, description, amount, category}, {dispatch}) => {
         try {
             const response = await api.post('/incomes/?userId=' + userId, {
                 category,
                 amount,
                 description
             });
+            await dispatch(checkLoginStatus());
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -72,11 +74,12 @@ export const updateIncome = createAsyncThunk(
 
 export const deleteIncome = createAsyncThunk(
     'incomes/deleteIncome',
-    async (incomeId) => {
+    async ({incomeId}, {dispatch}) => {
         try {
-            const response = await api.delete('/incomes/' + incomeId, {
+            const response = await api.delete(`/incomes/${incomeId}`, {
                 withCredentials: true,
             });
+            await dispatch(checkLoginStatus());
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -101,7 +104,7 @@ const incomeSlice = createSlice({
             .addCase(loadIncomes.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                console.log('Current state income is ', state.income)
+                // console.log('Current state income is ', state.incomes)
                 state.incomes = action.payload;
             })
             .addCase(loadIncome.pending, state => {
@@ -115,7 +118,8 @@ const incomeSlice = createSlice({
             .addCase(loadIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.incomes = action.payload;
+                // console.log('Action payload: ', action.payload);
+                state.incomes = state.incomes.find(item => item.id === action.payload.incomeId);
             })
             .addCase(addIncome.pending, state => {
                 state.isLoading = true;
@@ -128,7 +132,7 @@ const incomeSlice = createSlice({
             .addCase(addIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.incomes = action.payload;
+                state.incomes.push(action.payload);
             })
             .addCase(updateIncome.pending, state => {
                 state.isLoading = true;
@@ -154,8 +158,10 @@ const incomeSlice = createSlice({
             .addCase(deleteIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.incomes = state.incomes.filter(item => item.id !== action.payload.incomeId);
-            })
+                console.log('Post-deletion action payload: ', action.payload)
+                state.incomes = state.incomes.filter((item) => item.id !== action.payload.incomeId);
+                
+            });
     }
 });
 
