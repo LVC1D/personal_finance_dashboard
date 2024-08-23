@@ -16,6 +16,15 @@ export default function Balance() {
                 <BalanceChart data={userBalances} />
             </div>
             <h2>Your current net balance is: ${user.total_income - user.total_expenses}</h2>
+            <div className='income-list'>
+            {userBalances.map(item => (
+                    <li key = {item.id} className='income-item'>
+                        <div>
+                            <p><strong>Total {item.type}: </strong> ${item.data}</p>
+                        </div>
+                    </li>
+                ))}
+            </div>
         </div>
     )
 };
