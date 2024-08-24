@@ -20,10 +20,14 @@ export default function ExpenseStat() {
 
     return (
         <div>
-            <div className="pie-chart">
-                <PieChart data={expenses} />
-            </div>
-            <h2>Your total expenses: ${user?.total_expenses}</h2>
+            <section>
+                <div className="pie-chart">
+                    <PieChart data={expenses} />
+                    <div className='extra'>
+                        <h2>Expenses: ${user?.total_expenses}</h2>
+                    </div>
+                </div>
+            </section>
             <div className="income-list">
                 {isLoading && <p>Loading data...</p>}
                 {expenses.map(item => (

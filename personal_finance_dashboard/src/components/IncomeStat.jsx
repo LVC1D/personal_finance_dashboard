@@ -17,12 +17,21 @@ export default function IncomeStat() {
         })))
     }
 
+    // let aaplWs = new WebSocket('wss://stream.data.alpaca.markets/v2/test');
+    // aaplWs.onmessage = event => {
+    //     console.log(event.data);
+    // }
+
     return (
         <div>
-            <div className="pie-chart">
-                <PieChart data={incomes} />
-            </div>
-            <h2>Your total income: ${user?.total_income}</h2>
+            <section>
+                <div className="pie-chart">
+                    <PieChart data={incomes} />
+                    <div className={'extra'}>
+                        <h2>Income: ${user?.total_income}</h2>
+                    </div>
+                </div>
+            </section>
             <div className="income-list">
                 {isLoading && <p>Loading data...</p>}
                 {incomes.map(item => (

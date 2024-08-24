@@ -7,7 +7,7 @@ const ROUTES = {
     EXPENSE: (expenseId) => `/expenses/${expenseId}`,
     INCOMES: (userId) => `/${userId}/income`,
     INCOME: (incomeId) => `/income/${incomeId}`,
-    INVESTMENTS: '/investments'
+    INVESTMENTS: (userId) => `/${userId}/investments`
 };
 
 export default ROUTES;

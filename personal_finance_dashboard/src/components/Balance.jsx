@@ -6,19 +6,21 @@ export default function Balance() {
     const dispatch = useDispatch();
     const {user} = useSelector((state) => state.auth);
     const {userBalances} = useSelector((state) => state.users);
-
-    // console.log('Current balance: ', userBalances)
     
     return (
         <div>
-            <h3>Balance</h3>
-            <div className='pie-chart'>
-                <BalanceChart data={userBalances} />
-            </div>
-            <h2>Your current net balance is: ${user.total_income - user.total_expenses}</h2>
+            <section>
+                <div className='pie-chart'>
+                    <BalanceChart data={userBalances} />
+                    <div className='extra'>
+                        <h2>Net Balance: ${user.total_income - user.total_expenses}</h2>
+                        <p><em>excluding investments</em></p>
+                    </div>
+                </div>
+            </section>
             <div className='income-list'>
             {userBalances.map(item => (
-                    <li key = {item.id} className='income-item'>
+                    <li key = {userBalances.indexOf(item) + 1} className='income-item'>
                         <div>
                             <p><strong>Total {item.type}: </strong> ${item.data}</p>
                         </div>

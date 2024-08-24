@@ -1,0 +1,5 @@
+#live-ticker {
+    list-style: none;   
+    overflow: scroll;
+    max-height: 300px;
+}

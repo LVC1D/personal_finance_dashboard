@@ -36,7 +36,7 @@ export default function Header () {
                         Expenses
                     </button>
                 </Link>
-                <Link to={ROUTES.INVESTMENTS}>
+                <Link to={ROUTES.INVESTMENTS(parseInt(user?.id))}>
                     <button disabled={!isAuth}>
                         Investments
                     </button>

@@ -18,14 +18,6 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
                 res.status(200).json(result.rows);
             }
         });
-
-        // try {
-        //     const result = await pool.query('SELECT * FROM income WHERE user_id = $1', [userId]);
-        //     res.status(200).json(result.rows);
-        // } catch (err) {
-        //     console.error("Error fetching income:", err);
-        //     res.status(500).json({ message: "Server error, please try again later." });
-        // }
     });
 
     incomeRouter.get('/:id', ensureAuthenticated, async (req, res, next) => {

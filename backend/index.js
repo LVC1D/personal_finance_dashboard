@@ -20,6 +20,7 @@ const {authRouter, initAuth} = require('./apiRoutes/authApi');
 const userRouter = require('./apiRoutes/userApi')(pool, ensureAuthenticated);
 const incomeRouter = require('./apiRoutes/incomeApi')(pool, ensureAuthenticated, totalIncome);
 const expenseRouter = require('./apiRoutes/expenseApi')(pool, ensureAuthenticated, totalExpenses);
+const investmentRouter = require('./apiRoutes/investmentApi')(pool, ensureAuthenticated, totalInvestments); 
 
 // set up and initialzie the server
 
@@ -47,6 +48,7 @@ app.use('/api/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/incomes', incomeRouter);
 app.use('/expenses', expenseRouter);
+app.use('/investments', investmentRouter);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'personal_finance_dasboard', 'dist', 'index.html'));

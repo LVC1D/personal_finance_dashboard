@@ -20,7 +20,7 @@ export default function ExpenseAdder() {
         description: ''
     }
 
-    const handleAddIncome = (values) => {
+    const handleAddExpense = (values) => {
         dispatch(addExpense({
             userId: user.id,
             category: values.category,
@@ -42,7 +42,7 @@ export default function ExpenseAdder() {
               validationSchema={expenseSchema}
               onSubmit={(values, { setSubmitting }) => {
                   setSubmitting(true);
-                  handleAddIncome(values);
+                  handleAddExpense(values);
                   setSubmitting(false);
               }}
           >

@@ -22,7 +22,6 @@ async function totalExpenses(userId, pool) {
     let totalExpensesResult = await pool.query('SELECT * FROM expenses WHERE user_id = $1', [userId]);
   
     for (const item of totalExpensesResult.rows) {
-        console.log(item);
         currentSubTotal += parseFloat(item.amount);
       // console.log(item);
     }
@@ -35,7 +34,7 @@ async function totalInvestments(userId, pool) {
     let totalInvestmentResult = await pool.query('SELECT * FROM investments WHERE user_id = $1', [userId]);
   
     for (const item of totalInvestmentResult.rows) {
-      currentSubTotal += item.amount;
+      currentSubTotal += parseFloat(item.amount);
       // console.log(item);
     }
   

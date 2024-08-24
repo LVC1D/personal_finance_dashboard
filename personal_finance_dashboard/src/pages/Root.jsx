@@ -6,7 +6,8 @@ import { useEffect } from "react";
 import {loadIncomes} from '../slices/incomeSlice';
 import {loadExpenses} from '../slices/expenseSlice';
 import { checkLoginStatus } from "../slices/authSlice";
-import {loadBalances} from '../slices/userSlice'
+import {loadBalances} from '../slices/userSlice';
+import { loadInvestments } from "../slices/investmentSlice";
 
 export default function Root() {
     const {user, isAuth, isLoading} = useSelector((state) => state.auth);
@@ -23,6 +24,11 @@ export default function Root() {
             dispatch(loadIncomes({userId: user.id}))
             .then(() => {
                 dispatch(loadExpenses({userId: user.id}));
+            })
+            .then(() => {
+                dispatch(loadInvestments({
+                    userId: user.id
+                }));
             })
             .then(() => {
                 dispatch(loadBalances({

@@ -17,7 +17,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path={ROUTES.LOGIN} element={<LoginPage/>} />
     <Route path={ROUTES.INCOMES(':userId')} element={<Income/>} />
     <Route path={ROUTES.EXPENSES(':userId')} element={<Expenses/>} />
-    <Route path={ROUTES.INVESTMENTS} element={<Investments/>} />
+    <Route path={ROUTES.INVESTMENTS(':userId')} element={<Investments/>} />
   </Route>
 ))
 

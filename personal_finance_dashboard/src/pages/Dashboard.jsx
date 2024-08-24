@@ -1,22 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import Balance from "../components/Balance";
 import LiveStockFeed from "../components/LiveStockFeed";
 import ExtraFeatures from "../components/ExtraFeatures";
 import { Link } from "react-router-dom";
 import ROUTES from "../routes";
-import { checkLoginStatus, setUser } from "../slices/authSlice";
 
 export default function Dashboard() {
-    const {user, isAuth} = useSelector((state) => state.auth);
+    const {isAuth} = useSelector((state) => state.auth);
     // console.log("Current user:", user);
-    const dispatch = useDispatch();
-
-    console.log(`User ID is ${user?.id}`);
-
-    // useEffect(() => {
-    //     dispatch(checkLoginStatus()); 
-    // }, [dispatch]);
 
     return (
         <>

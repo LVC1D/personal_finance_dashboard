@@ -47,6 +47,10 @@ module.exports = (pool, ensureAuthenticated) => {
                 SELECT 'Expenses' AS type, total_expenses AS value
                 FROM users
                 WHERE id = $1
+                UNION ALL
+                SELECT 'Investments' AS type, total_investments AS value
+                FROM users
+                WHERE id = $1
                 ) subquery;
                 `, [userId], (err, result) => {
                     if (err) {
