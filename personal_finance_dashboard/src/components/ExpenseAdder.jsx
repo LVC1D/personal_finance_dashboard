@@ -18,7 +18,7 @@ export default function ExpenseAdder() {
         category: '',
         amount: '',
         description: ''
-    }
+    };
 
     const handleAddExpense = (values) => {
         dispatch(addExpense({

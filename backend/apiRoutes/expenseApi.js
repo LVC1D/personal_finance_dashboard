@@ -1,9 +1,9 @@
 const expenseRouter = require('express').Router();
-const {body, validationResult} = require('express-validator');
-const { totalIncome } = require('../helpers');
+const {body} = require('express-validator');
+const csrfProtection = require('../csrfConfig');
 
 module.exports = (pool, ensureAuthenticated, totalExpenses) => {
-    expenseRouter.get('/', ensureAuthenticated, async (req, res, next) => {
+    expenseRouter.get('/', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         let userId = parseInt(req.query.userId);
 
         // Validate the userId
@@ -21,7 +21,7 @@ module.exports = (pool, ensureAuthenticated, totalExpenses) => {
         });
     });
 
-    expenseRouter.get('/:id', ensureAuthenticated, async (req, res, next) => {
+    expenseRouter.get('/:id', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         const expenseId = parseInt(req.params.id);
         const userId = parseInt(req.query.userId);
         if (isNaN(userId)) {
@@ -41,7 +41,12 @@ module.exports = (pool, ensureAuthenticated, totalExpenses) => {
         });
     });
 
-    expenseRouter.post('/', ensureAuthenticated, async (req, res, next) => {
+    expenseRouter.post('/', ensureAuthenticated, csrfProtection, [
+        body('category').isString().isLength({ min: 3 }).trim().escape(),
+        body('amount').isNumeric().trim().escape(),
+        body('description').isString().trim().escape().blacklist("'\"`;\\/\\#%")
+    ], async (req, res, next) => {
+        
         const userId = parseInt(req.query.userId);
         if (isNaN(userId)) {
             res.status(400).json({ message: "Invalid user ID" });
@@ -81,7 +86,12 @@ module.exports = (pool, ensureAuthenticated, totalExpenses) => {
         }
     });
 
-    expenseRouter.put('/:id', ensureAuthenticated, async (req, res, next) => {
+    expenseRouter.put('/:id', ensureAuthenticated, csrfProtection, [
+        body('category').isString().isLength({ min: 3 }).trim().escape(),
+        body('amount').isNumeric().trim().escape(),
+        body('description').isString().trim().escape().blacklist("'\"`;\\/\\#%")
+    ], async (req, res, next) => {
+        
         const expenseId = parseInt(req.params.id);
         if (!expenseId) {
             res.status(400).json({ message: "Ther desired expense is not found." });
@@ -110,7 +120,6 @@ module.exports = (pool, ensureAuthenticated, totalExpenses) => {
             const expenseTotal = await totalExpenses(userId, pool);
     
             await pool.query('UPDATE users SET total_expenses = $1 WHERE id = $2', [parseFloat(expenseTotal), userId]);
-    
             res.status(201).json(result.rows[0]);
         } catch (err) {
             console.error(err);
@@ -118,7 +127,7 @@ module.exports = (pool, ensureAuthenticated, totalExpenses) => {
         }       
     });
 
-    expenseRouter.delete('/:id', ensureAuthenticated, async (req, res, next) => {
+    expenseRouter.delete('/:id', csrfProtection, ensureAuthenticated, async (req, res, next) => {
         const userId = parseInt(req.user.id);
         const expenseId = parseInt(req.params.id);
         if (!expenseId) {

@@ -4,6 +4,7 @@ import incomeSlice from './slices/incomeSlice';
 import expenseSlice from './slices/expenseSlice';
 import investmentSlice from './slices/investmentSlice';
 import userSlice from './slices/userSlice';
+import tooltipSlice from './slices/tooltipSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
         expenses: expenseSlice,
         users: userSlice,
         investments: investmentSlice,
+        tooltip: tooltipSlice,
     }
 })

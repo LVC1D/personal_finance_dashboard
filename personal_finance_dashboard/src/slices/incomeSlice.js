@@ -58,13 +58,15 @@ export const addIncome = createAsyncThunk(
 
 export const updateIncome = createAsyncThunk(
     'incomes/updateIncome',
-    async ({incomeId, description, amount, category}) => {
+    async ({incomeId, description, amount, category}, {dispatch}) => {
         try {
-            const response = await api.put('/incomes/' + incomeId, {
+            const response = await api.put(`/incomes/${incomeId}`, {
                 category,
                 amount,
                 description
             });
+            // console.log('Action payload on putting: ', response.data);
+            await dispatch(checkLoginStatus());
             return response.data;
         } catch(err) {
             throw err.response.data;
@@ -145,7 +147,10 @@ const incomeSlice = createSlice({
             .addCase(updateIncome.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.incomes = action.payload;
+                const updatedIncome = action.payload;
+                state.incomes = state.incomes.map((income) =>
+                    income.id === updatedIncome.id ? updatedIncome : income
+                );
             })
             .addCase(deleteIncome.pending, state => {
                 state.isLoading = true;

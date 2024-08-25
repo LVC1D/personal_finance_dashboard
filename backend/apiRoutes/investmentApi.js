@@ -1,8 +1,9 @@
 const investmentRouter = require('express').Router();
-const {body, validationResult} = require('express-validator')
+const {body, validationResult} = require('express-validator');
+const csrfProtection = require('../csrfConfig');
 
 module.exports = (pool, ensureAuthenticated, totalInvestments) => {
-    investmentRouter.get('/', ensureAuthenticated, async (req, res, next) => {
+    investmentRouter.get('/', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         let userId = parseInt(req.query.userId);
 
         // Validate the userId
@@ -20,7 +21,7 @@ module.exports = (pool, ensureAuthenticated, totalInvestments) => {
         });
     });
 
-    investmentRouter.get('/:id', ensureAuthenticated, async (req, res, next) => {
+    investmentRouter.get('/:id', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         const investmentId = parseInt(req.params.id);
         const userId = parseInt(req.query.userId);
         if (isNaN(userId)) {
@@ -40,7 +41,14 @@ module.exports = (pool, ensureAuthenticated, totalInvestments) => {
         });
     });
 
-    investmentRouter.post('/', ensureAuthenticated, async (req, res, next) => {
+    investmentRouter.post('/', ensureAuthenticated, csrfProtection, [
+        body('amount').isNumeric().trim().escape()
+    ], async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ message: errors.array() });
+        }
+            
         const userId = parseInt(req.query.userId);
         if (isNaN(userId)) {
             res.status(400).json({ message: "Invalid user ID" });
@@ -80,7 +88,14 @@ module.exports = (pool, ensureAuthenticated, totalInvestments) => {
         }
     });
 
-    investmentRouter.put('/:id', ensureAuthenticated, async (req, res, next) => {
+    investmentRouter.put('/:id', ensureAuthenticated, csrfProtection, [
+        body('amount').isNumeric().trim().escape()
+    ], async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ message: errors.array() });
+        }
+        
         const investmentId = parseInt(req.params.id);
         if (!investmentId) {
             res.status(400).json({ message: "Ther desired investment is not found." });
@@ -117,7 +132,7 @@ module.exports = (pool, ensureAuthenticated, totalInvestments) => {
         }      
     });
 
-    investmentRouter.delete('/:id', ensureAuthenticated, async (req, res, next) => {
+    investmentRouter.delete('/:id', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         const userId = parseInt(req.user.id);
         const investmentId = parseInt(req.params.id);
         if (!investmentId) {

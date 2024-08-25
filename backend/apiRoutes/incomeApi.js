@@ -1,8 +1,9 @@
 const incomeRouter = require('express').Router();
-const {body, validationResult} = require('express-validator')
+const {body} = require('express-validator');
+const csrfProtection = require('../csrfConfig');
 
 module.exports = (pool, ensureAuthenticated, totalIncome) => {
-    incomeRouter.get('/', ensureAuthenticated, async (req, res, next) => {
+    incomeRouter.get('/', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         let userId = parseInt(req.query.userId);
 
         // Validate the userId
@@ -20,7 +21,7 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
         });
     });
 
-    incomeRouter.get('/:id', ensureAuthenticated, async (req, res, next) => {
+    incomeRouter.get('/:id', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         const incomeId = parseInt(req.params.id);
         const userId = parseInt(req.query.userId);
         if (isNaN(userId)) {
@@ -40,7 +41,12 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
         });
     });
 
-    incomeRouter.post('/', ensureAuthenticated, async (req, res, next) => {
+    incomeRouter.post('/', ensureAuthenticated, csrfProtection, [
+        body('category').isString().isLength({ min: 3 }).trim().escape(),
+        body('amount').isNumeric().trim().escape(),
+        body('description').isString().trim().escape().blacklist("'\"`;\\/\\#%")
+    ], async (req, res, next) => {
+        
         const userId = parseInt(req.query.userId);
         if (isNaN(userId)) {
             res.status(400).json({ message: "Invalid user ID" });
@@ -80,7 +86,12 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
         }
     });
 
-    incomeRouter.put('/:id', ensureAuthenticated, async (req, res, next) => {
+    incomeRouter.put('/:id', ensureAuthenticated, csrfProtection, [
+        body('category').isString().isLength({ min: 3 }).trim().escape(),
+        body('amount').isNumeric().trim().escape(),
+        body('description').isString().trim().escape().blacklist("'\"`;\\/\\#%")
+    ], async (req, res, next) => {
+        
         const incomeId = parseInt(req.params.id);
         if (!incomeId) {
             res.status(400).json({ message: "Ther desired income is not found." });
@@ -109,7 +120,6 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
             const incomeTotal = await totalIncome(userId, pool);
     
             await pool.query('UPDATE users SET total_income = $1 WHERE id = $2', [parseFloat(incomeTotal), userId]);
-    
             res.status(201).json(result.rows[0]);
         } catch (err) {
             console.error(err);
@@ -117,7 +127,7 @@ module.exports = (pool, ensureAuthenticated, totalIncome) => {
         }      
     });
 
-    incomeRouter.delete('/:id', ensureAuthenticated, async (req, res, next) => {
+    incomeRouter.delete('/:id', ensureAuthenticated, csrfProtection, async (req, res, next) => {
         const userId = parseInt(req.user.id);
         const incomeId = parseInt(req.params.id);
         if (!incomeId) {

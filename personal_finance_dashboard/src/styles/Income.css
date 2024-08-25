@@ -19,6 +19,31 @@
     list-style: none;
 }
 
+/* Tooltip */
+
+.tooltip-container {
+    position: relative;
+    top: -25px;
+    left: 50px;
+  }
+  
+  .tooltip-box {
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip-container .tooltip-box {
+    visibility: visible;
+    opacity: 1;
+  }
+
 /* Style the income form */
 
 .income-form {
@@ -64,18 +89,28 @@
     text-align: center;
 }
 
+#update-income,
 #add-income {
     justify-self: stretch;
     width: 25rem;
     padding: 10px;
     margin: 10px;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: #fff;
     background-color: #000;
     font-weight: bold;
     cursor: pointer;
+    
+}
+
+#update-income {
+    background-color: #fff;
+    color: #000; 
+}
+
+#add-income {
     position: relative;
-    top: 250px;
+    top: 250px;  
 }
 
 /* income listed */

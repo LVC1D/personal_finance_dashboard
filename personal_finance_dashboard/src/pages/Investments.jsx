@@ -1,5 +1,5 @@
 import InvestmentStat from '../components/InvestmentStat';
-// import InvestmentAdder from '../components/InvestmentAdder';
+import MonthPicker from '../components/MonthPicker';
 import LiveStockFeed from '../components/LiveStockFeed';
 
 export default function Investments() {
@@ -12,9 +12,9 @@ export default function Investments() {
                 <div className="grid-item">
                     <LiveStockFeed/>
                 </div>
-                {/* <div className="grid-item">
-                    <InvestmentAdder/>
-                </div> */}
+                <div className="grid-item">
+                    <MonthPicker/>
+                </div>
             </div>
         </div>
     );

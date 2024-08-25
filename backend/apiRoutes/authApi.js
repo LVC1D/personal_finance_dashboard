@@ -7,8 +7,8 @@ const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const store = new session.MemoryStore();
 const {pool} = require('../model/database');
-const {body} = require('express-validator');
-// const csrfProtection = require('../csrfConfig');
+const {body, validationResult} = require('express-validator');
+const csrfProtection = require('../csrfConfig');
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -50,7 +50,16 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-authRouter.post('/register', async (req, res, next) => {
+authRouter.post('/register', csrfProtection, [
+    body('email').isEmail(),
+    body('name').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%"),
+    body('password').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%")
+], async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: errors.array() });
+    }
+
     try {
         const { email, name, password } = req.body;
 
@@ -81,7 +90,10 @@ authRouter.post('/register', async (req, res, next) => {
     }
 });
 
-authRouter.post('/login', (req, res, next) => {
+authRouter.post('/login', csrfProtection, [
+    body('email').isEmail(),
+    body('password').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%")
+], (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             return next(err);

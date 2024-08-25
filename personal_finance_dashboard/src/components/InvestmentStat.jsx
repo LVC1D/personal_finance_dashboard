@@ -1,5 +1,5 @@
 import {useSelector, useDispatch} from 'react-redux';
-import { loadInvestments, loadInvestment, deleteInvestment } from '../slices/investmentSlice';
+import { loadInvestments, deleteInvestment } from '../slices/investmentSlice';
 import InvestmentChart from './PieChart';
 import '../styles/Income.css';
 import trashIcon from '../assets/Trash_icon.svg';
@@ -9,7 +9,6 @@ export default function InvestmentStat() {
     const {investments, isLoading, hasError} = useSelector((state) => state.investments);
     const {user} = useSelector((state) => state.auth);
 
-    const handleShowInvestment = (investmentId, userId) => dispatch(loadInvestment({investmentId, userId}));
     const handleDeleteInvestment = (investmentId) => {
         dispatch(deleteInvestment(investmentId))
         .then(() => dispatch(loadInvestments({
@@ -31,7 +30,7 @@ export default function InvestmentStat() {
                 {isLoading && <p>Loading data...</p>}
                 {investments.map(item => (
                     <li key = {item.id} className='income-item'>
-                        <div onClick={() => handleShowInvestment(item.id, user.id)}>
+                        <div>
                             <p><strong>Asset Name:</strong> {item.asset_name}</p>
                             <p>Invested capital: ${item.amount}</p>
                             <p>At the price of: ${parseFloat(item.open_price)}</p>

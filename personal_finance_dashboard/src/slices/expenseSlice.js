@@ -143,7 +143,10 @@ const expenseSlice = createSlice({
             .addCase(updateExpense.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.hasError = false;
-                state.expenses = action.payload;
+                const updatedExpenses = action.payload;
+                state.expenses = state.expenses.map((expense) =>
+                    expense.id === updatedExpenses.id ? updatedExpenses : expense
+                );
             })
             .addCase(deleteExpense.pending, state => {
                 state.isLoading = true;

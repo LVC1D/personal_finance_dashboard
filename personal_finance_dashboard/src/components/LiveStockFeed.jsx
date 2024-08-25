@@ -18,19 +18,6 @@ export default function LiveStockFeed() {
         amount: Yup.number().required('Amount is required'),
     });
 
-    // const initialValues = {
-    //     assetName: '',
-    //     amount: '',
-    //     openPrice: ''
-    // }
-
-    // const handleAddInvestment = ({assetName, amount, openPrice}) => dispatch(addInvestment({
-    //     userId: user.id,
-    //     assetName,
-    //     amount,
-    //     openPrice
-    // }));
-
     useEffect(() => {
         const webSockets = symbols.map((symbol, index) => {
             const createWebSocket = () => {
@@ -80,7 +67,7 @@ export default function LiveStockFeed() {
 
     return (
         <div>
-            <h3>Live Crypto Stock</h3>
+            <h3>Live Crypto Quotes</h3>
             <ul id='live-ticker'>
                 {prices
                     .filter(priceData => priceData !== null)

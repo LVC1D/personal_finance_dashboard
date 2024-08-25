@@ -1,10 +1,11 @@
 const express = require('express');
 const userRouter = express.Router();
-// const {body, validationResult} = require('express-validator');
+const {body, validationResult} = require('express-validator');
+const csrfProtection = require('../csrfConfig');
 
 module.exports = (pool, ensureAuthenticated) => {
     
-        userRouter.get('/', ensureAuthenticated, async (req, res) => {
+        userRouter.get('/', ensureAuthenticated, csrfProtection, async (req, res) => {
     
             await pool.query('SELECT * FROM users', (err, result) => {
                 if (err) {
@@ -16,7 +17,7 @@ module.exports = (pool, ensureAuthenticated) => {
             });
         });
         
-        userRouter.get('/:id', ensureAuthenticated, async (req, res) => {
+        userRouter.get('/:id', ensureAuthenticated, csrfProtection, async (req, res) => {
             const userId = req.params.id;
             await pool.query('SELECT * FROM users WHERE id = $1', [userId], (err, result) => {
                 if (err) {
@@ -30,7 +31,8 @@ module.exports = (pool, ensureAuthenticated) => {
             });
         });
 
-        userRouter.get('/:id/balances', ensureAuthenticated, async (req, res) => {
+        userRouter.get('/:id/balances', ensureAuthenticated, csrfProtection, async (req, res) => {
+            
             const userId = parseInt(req.params.id);
             if (!req.params.id || isNaN(req.params.id)) {
                 res.status(400).json({message: 'Invalid user'});
@@ -70,10 +72,10 @@ module.exports = (pool, ensureAuthenticated) => {
         //     body('username').isString().isLength({ min: 3 }).trim().escape(),
         //     body('address').isString().isLength({ min: 6 }).trim().escape().blacklist("'\"`;\\/\\#%")
         // ], async (req, res) => {
-        //     const errors = validationResult(req);
-        //     if (!errors.isEmpty()) {
-        //         return res.status(400).json({ message: errors.array() });
-        //     }
+            // const errors = validationResult(req);
+            // if (!errors.isEmpty()) {
+            //     return res.status(400).json({ message: errors.array() });
+            // }
             
         //     const userId = req.params.id;
         //     const { username, address } = req.body;
