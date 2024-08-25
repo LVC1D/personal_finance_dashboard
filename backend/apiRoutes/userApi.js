@@ -1,6 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
-const {body, validationResult} = require('express-validator');
+const {body} = require('express-validator');
+const bcrypt = require('bcryptjs');
 const csrfProtection = require('../csrfConfig');
 
 module.exports = (pool, ensureAuthenticated) => {
@@ -68,26 +69,26 @@ module.exports = (pool, ensureAuthenticated) => {
 
         })
 
-        // userRouter.put('/:id', ensureAuthenticated, [
-        //     body('username').isString().isLength({ min: 3 }).trim().escape(),
-        //     body('address').isString().isLength({ min: 6 }).trim().escape().blacklist("'\"`;\\/\\#%")
-        // ], async (req, res) => {
-            // const errors = validationResult(req);
-            // if (!errors.isEmpty()) {
-            //     return res.status(400).json({ message: errors.array() });
-            // }
+        userRouter.put('/:id', ensureAuthenticated, csrfProtection, [
+            body('email').isEmail(),
+            body('name').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%"),
+            body('password').isString().isLength({ min: 8 }).blacklist("'\"`;\\/\\#%")
+        ], async (req, res) => {
             
-        //     const userId = req.params.id;
-        //     const { username, address } = req.body;
-        //     await pool.query('UPDATE users SET username = $1, address = $2 WHERE id = $3', [username, address, userId], (err, result) => {
-        //         if (err) {
-        //             console.error("Error updating user:", err);
-        //             res.status(500).json({ message: err.message });
-        //         } else {
-        //             res.status(200).json({ message: "User updated" });
-        //         }
-        //     });
-        // });
+            const userId = req.params.id;
+            const { email, name, password } = req.body;
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            await pool.query('UPDATE users SET email = $1, name = $2, password = $3 WHERE id = $4', [email, name, hashedPassword, userId], (err, result) => {
+                if (err) {
+                    console.error("Error updating user:", err);
+                    res.status(500).json({ message: err.message });
+                } else {
+                    res.status(200).json({ message: "User updated" });
+                }
+            });
+        });
     
         return userRouter;
 }

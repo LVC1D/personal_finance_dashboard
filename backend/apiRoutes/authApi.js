@@ -53,7 +53,7 @@ passport.deserializeUser(async (id, done) => {
 authRouter.post('/register', csrfProtection, [
     body('email').isEmail(),
     body('name').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%"),
-    body('password').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%")
+    body('password').isString().isLength({ min: 8 }).blacklist("'\"`;\\/\\#%")
 ], async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,7 +92,7 @@ authRouter.post('/register', csrfProtection, [
 
 authRouter.post('/login', csrfProtection, [
     body('email').isEmail(),
-    body('password').isString().isLength({ min: 3 }).blacklist("'\"`;\\/\\#%")
+    body('password').isString().isLength({ min: 8 }).blacklist("'\"`;\\/\\#%")
 ], (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
