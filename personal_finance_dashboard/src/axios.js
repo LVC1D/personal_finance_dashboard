@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseUrl: 'http://localhost:7935',
+    baseUrl: 'https://personal-finance-dashboard.onrender.com',
     withCredentials: true,
 });
 

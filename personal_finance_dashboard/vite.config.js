@@ -7,29 +7,29 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:7935',
+        target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         ws: true,
         secure: false
       },
       '/income': {
-        target: 'http://localhost:7935',
+        target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         secure: false
       },
       '/expenses': {
-        target: 'http://localhost:7935',
+        target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         secure: false
       },
       '/investments': {
-        target: 'http://localhost:7935',
+        target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         ws: true,
         secure: false
       },
       '/users': {
-        target: 'http://localhost:7935',
+        target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         secure: false
       },
