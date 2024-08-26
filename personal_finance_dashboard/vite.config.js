@@ -10,28 +10,28 @@ export default defineConfig({
         target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         ws: true,
-        secure: false
+        secure: true
       },
       '/income': {
         target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
-        secure: false
+        secure: true
       },
       '/expenses': {
         target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
-        secure: false
+        secure: true
       },
       '/investments': {
         target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
         ws: true,
-        secure: false
+        secure: true
       },
       '/users': {
         target: 'https://personal-finance-dashboard.onrender.com',
         changeOrigin: true,
-        secure: false
+        secure: true
       },
     }
   },
