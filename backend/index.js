@@ -28,7 +28,7 @@ const csrfProtection = require('./csrfConfig');
 app.use(helmet());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://personal-finance-front.onrender.com',
     credentials: true,
 }));
 
