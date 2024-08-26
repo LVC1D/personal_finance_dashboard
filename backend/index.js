@@ -31,7 +31,7 @@ app.use(helmet({
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "https://js.stripe.com"],
             imgSrc: ["'self'", "data:", "https://static-assets.codecademy.com"],
-            connectSrc: ["'self'", "https://personal-finance-dashboard.onrender.com/"],
+            connectSrc: ["'self'", "https://personal-finance-dashboard.onrender.com/", "wss://stream.binance.com:9443", "wss://stream.data.sandbox.alpaca.markets/v2/test"],
         },
     },
 }));
