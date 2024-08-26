@@ -25,7 +25,16 @@ const csrfProtection = require('./csrfConfig');
 
 // set up and initialzie the server
 
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "https://js.stripe.com"],
+            imgSrc: ["'self'", "data:", "https://static-assets.codecademy.com"],
+            connectSrc: ["'self'", "https://personal-finance-dashboard.onrender.com/"],
+        },
+    },
+}));
 
 app.use(cors({
     origin: 'https://personal-finance-front.onrender.com',
